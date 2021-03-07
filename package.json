@@ -1,0 +1,15 @@
+{
+    "name": "com.tymski.sprite-drawer",
+    "displayName": "Sprite Drawer",
+    "description": "Basic sprite drawer",
+    "version": "0.0.1",
+    "unity": "2017.1",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/tymski/UnitySpriteDrawer.git"
+    },
+    "author": {
+        "name": "Tymski"
+    }
+}
