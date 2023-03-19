@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace Tymski
+namespace Tymski.EditorTools
 {
     [CustomPropertyDrawer(typeof(Sprite))]
     public class SpriteDrawer : PropertyDrawer
@@ -26,6 +26,7 @@ namespace Tymski
             {
                 Expanded ^= true;
                 CalculateRect(property);
+                property.serializedObject.ApplyModifiedProperties();
             }
             if (!Expanded) return;
 
@@ -43,26 +44,34 @@ namespace Tymski
             Sprite sprite = property.objectReferenceValue as Sprite;
             CalculateRect(property);
 
-
             inspectorSprite.width = width;
             inspectorSprite.height = height;
             inspectorSprite.x = position.x + position.width - inspectorSprite.width;
 
+            var spriteRect = sprite.textureRect;
+            var textureRect = new Rect(spriteRect.x / sprite.texture.width, spriteRect.y / sprite.texture.height, spriteRect.width / sprite.texture.width, spriteRect.height / sprite.texture.height);
+
             s_TempStyle.normal.background = sprite.texture;
-            s_TempStyle.Draw(inspectorSprite, GUIContent.none, false, false, false, false);
+            GUI.DrawTextureWithTexCoords(inspectorSprite, sprite.texture, textureRect);
 
             EditorGUI.indentLevel = indent;
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            if (property.serializedObject.isEditingMultipleObjects)
+            float height = base.GetPropertyHeight(property, label);
+
+            if (!property.serializedObject.isEditingMultipleObjects && Expanded && property.objectReferenceValue != null)
             {
-                return base.GetPropertyHeight(property, label);
+                Sprite sprite = property.objectReferenceValue as Sprite;
+                float ratioX = position.width / sprite.rect.width;
+                float ratioY = 200f / sprite.rect.height;
+                float ratio = Mathf.Min(ratioX, ratioY);
+                ratio = Mathf.Min(ratio, 1f);
+                height += sprite.rect.height * ratio + EditorGUIUtility.standardVerticalSpacing;
             }
-            CalculateRect(property);
-            if (height == 0) return base.GetPropertyHeight(property, label);
-            return base.GetPropertyHeight(property, label) + height + 4;
+
+            return height;
         }
 
         void CalculateRect(SerializedProperty property)
@@ -75,7 +84,6 @@ namespace Tymski
             }
 
             Sprite sprite = property.objectReferenceValue as Sprite;
-
             float ratioX = position.width / sprite.rect.width;
             float ratioY = 200f / sprite.rect.height;
             float ratio = Mathf.Min(ratioX, ratioY);

@@ -2,7 +2,7 @@
     "name": "com.tymski.sprite-drawer",
     "displayName": "Sprite Drawer",
     "description": "Basic sprite drawer",
-    "version": "0.0.1",
+    "version": "0.5.0",
     "unity": "2017.1",
     "license": "MIT",
     "repository": {
