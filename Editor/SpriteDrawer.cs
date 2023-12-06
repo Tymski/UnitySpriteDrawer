@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 namespace Tymski.EditorTools
 {
@@ -10,7 +8,7 @@ namespace Tymski.EditorTools
     {
 
         public static bool Expanded;
-        private static GUIStyle s_TempStyle = new GUIStyle();
+        private static GUIStyle s_TempStyle = new();
         float height;
         float width;
         Rect position;
@@ -84,13 +82,13 @@ namespace Tymski.EditorTools
             }
 
             Sprite sprite = property.objectReferenceValue as Sprite;
-            float ratioX = position.width / sprite.rect.width;
-            float ratioY = 200f / sprite.rect.height;
+            float ratioX = position.width / sprite.textureRect.width;
+            float ratioY = 200f / sprite.textureRect.height;
             float ratio = Mathf.Min(ratioX, ratioY);
             ratio = Mathf.Min(ratio, 1f);
 
-            height = sprite.rect.height * ratio;
-            width = sprite.rect.width * ratio;
+            height = sprite.textureRect.height * ratio;
+            width = sprite.textureRect.width * ratio;
         }
     }
 }
